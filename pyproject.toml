@@ -1,0 +1,15 @@
+[project]
+name = "developers-marketplace"
+version = "0.1.0"
+description = "מרקטפלייס להתאמת מפתחים ישראלים ללקוחות שבונים פרויקט מאפס"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+# asyncio_mode=auto מאפשר טסטים async בלי דקורטור מפורש לכל אחד
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

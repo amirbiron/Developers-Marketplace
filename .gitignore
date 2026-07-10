@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# בדיקות וכיסוי
+.pytest_cache/
+.coverage
+htmlcov/
+
+# סביבה מקומית — לעולם לא ל-git (מכיל מפתחות)
+.env
+.env.*
+!.env.example
+!.env.template
+*.local
+
+# IDE / מערכת הפעלה
+.idea/
+.vscode/
+.DS_Store

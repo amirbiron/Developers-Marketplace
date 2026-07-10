@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(52, 211, 153, 0.28);
+    color: #fff;
+  }
+
+  /* פס גלילה עדין בגוון כהה */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0e12;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e2a36;
+    border-radius: 9999px;
+    border: 2px solid #0a0e12;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2b3b4a;
+  }
+
+  /* מיקוד נגיש עם גוון האקסנט */
+  :focus-visible {
+    outline: 2px solid rgba(52, 211, 153, 0.7);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-line bg-surface shadow-card;
+  }
+
+  /* טקסט עם גרדיאנט האקסנט */
+  .text-gradient {
+    @apply bg-accent-gradient bg-clip-text text-transparent;
+  }
+
+  /* תווית mono קטנה בסגנון קוד */
+  .kbd {
+    @apply rounded-md border border-line bg-surface2 px-1.5 py-0.5 font-mono text-xs text-muted;
+  }
+}
