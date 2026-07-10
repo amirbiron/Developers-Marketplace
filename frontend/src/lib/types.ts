@@ -86,6 +86,11 @@ export interface DeveloperPublic extends Omit<DeveloperCreateBody, "whatsapp_e16
   is_active: boolean;
 }
 
+/** תשובת POST /developers — כוללת edit_token חד-פעמי (לעריכה עתידית). */
+export interface DeveloperCreateResponse extends DeveloperPublic {
+  edit_token: string;
+}
+
 /** תשובות הלקוח שנאספות באשף (state פנימי). */
 export interface MatchAnswers {
   project_type: ProjectTypeCode | null;

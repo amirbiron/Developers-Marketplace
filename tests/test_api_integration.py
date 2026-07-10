@@ -53,13 +53,31 @@ class TestDevelopersAPI:
         resp = await client.post("/developers", json=bad)
         assert resp.status_code == 422
 
-    async def test_patch_self_suspend(self, client):
-        dev_id = (await client.post("/developers", json=VALID_DEV)).json()["id"]
-        resp = await client.patch(f"/developers/{dev_id}", json={"is_active": False})
-        assert resp.status_code == 200
-        assert resp.json()["is_active"] is False
-        # מושהה → 404 בקריאה ציבורית
-        assert (await client.get(f"/developers/{dev_id}")).status_code == 404
+    async def test_create_returns_edit_token(self, client):
+        body = (await client.post("/developers", json=VALID_DEV)).json()
+        assert isinstance(body.get("edit_token"), str) and body["edit_token"]
+        # ה-token לא חוזר ב-GET הציבורי
+        assert "edit_token" not in (await client.get(f"/developers/{body['id']}")).json()
+
+    async def test_patch_requires_valid_token(self, client):
+        created = (await client.post("/developers", json=VALID_DEV)).json()
+        dev_id, token = created["id"], created["edit_token"]
+
+        # בלי token → 403
+        assert (await client.patch(f"/developers/{dev_id}", json={"is_active": False})).status_code == 403
+        # token שגוי → 403
+        bad = await client.patch(
+            f"/developers/{dev_id}", json={"is_active": False}, headers={"X-Edit-Token": "nope"}
+        )
+        assert bad.status_code == 403
+
+        # token נכון → 200 (השהיה עצמית)
+        ok = await client.patch(
+            f"/developers/{dev_id}", json={"is_active": False}, headers={"X-Edit-Token": token}
+        )
+        assert ok.status_code == 200
+        assert ok.json()["is_active"] is False
+        assert (await client.get(f"/developers/{dev_id}")).status_code == 404  # מושהה
 
 
 @requires_db

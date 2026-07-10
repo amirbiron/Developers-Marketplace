@@ -3,6 +3,7 @@
 
 import type {
   DeveloperCreateBody,
+  DeveloperCreateResponse,
   DeveloperPublic,
   MatchRequestBody,
   MatchResponse,
@@ -278,11 +279,19 @@ export async function postReferral(
   return { whatsapp_e164: number, wa_link: `https://wa.me/${number}?text=${text}` };
 }
 
-export async function postDeveloper(body: DeveloperCreateBody): Promise<DeveloperPublic> {
+export async function postDeveloper(
+  body: DeveloperCreateBody,
+): Promise<DeveloperCreateResponse> {
   await delay(600);
   const { whatsapp_e164, ...rest } = body;
   void whatsapp_e164;
-  return { id: fakeUuid(), is_verified: false, is_active: true, ...rest };
+  return {
+    id: fakeUuid(),
+    is_verified: false,
+    is_active: true,
+    edit_token: `${fakeUuid()}${fakeUuid()}`,
+    ...rest,
+  };
 }
 
 export async function getDeveloper(id: string): Promise<DeveloperPublic> {

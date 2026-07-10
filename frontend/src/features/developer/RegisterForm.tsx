@@ -7,7 +7,12 @@ import { OptionCard } from "@/components/ui/OptionCard";
 import { TagInput } from "@/components/ui/TagInput";
 import { postAvatar, postDeveloper } from "@/lib/api";
 import { AVAILABILITY_LABELS, CATEGORIES, PRICING_LABELS } from "@/lib/labels";
-import type { Availability, DeveloperCreateBody, DeveloperPublic, PricingModel } from "@/lib/types";
+import type {
+  Availability,
+  DeveloperCreateBody,
+  DeveloperCreateResponse,
+  PricingModel,
+} from "@/lib/types";
 import { RegisterSuccess } from "./RegisterSuccess";
 
 const STACK_SUGGESTIONS = [
@@ -83,7 +88,7 @@ export function RegisterForm() {
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const [created, setCreated] = useState<DeveloperPublic | null>(null);
+  const [created, setCreated] = useState<DeveloperCreateResponse | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
@@ -170,6 +175,12 @@ export function RegisterForm() {
 
     try {
       const dev = await postDeveloper(body);
+      // שמירת אסימון העריכה במכשיר — יאפשר לערוך את הפרופיל בעתיד (header X-Edit-Token)
+      try {
+        localStorage.setItem(`devmatch_edit_token_${dev.id}`, dev.edit_token);
+      } catch {
+        /* localStorage לא זמין — לא קריטי */
+      }
       setCreated(dev);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {

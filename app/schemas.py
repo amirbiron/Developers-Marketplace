@@ -263,6 +263,13 @@ class DeveloperPublic(BaseModel):
     is_active: bool
 
 
+class DeveloperCreated(DeveloperPublic):
+    """תשובת POST /developers — כוללת את אסימון העריכה. מוחזר **פעם אחת בלבד**;
+    יש לשמור אותו כדי לערוך את הפרופיל בעתיד (PATCH דורש אותו ב-header X-Edit-Token)."""
+
+    edit_token: str
+
+
 # =========================================================================
 # Match
 # =========================================================================

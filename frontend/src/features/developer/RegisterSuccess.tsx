@@ -1,4 +1,4 @@
-import { CheckCircle2, ShieldQuestion } from "lucide-react";
+import { CheckCircle2, Lock, ShieldQuestion } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 import type { DeveloperPublic } from "@/lib/types";
@@ -23,6 +23,14 @@ export function RegisterSuccess({ dev, onEdit }: { dev: DeveloperPublic; onEdit:
           <p className="text-sm text-muted">
             תג <span className="font-medium text-accent-bright">"מאומת"</span> יתווסף בהמשך
             אחרי בדיקה קצרה — הוא דוחף אותך למעלה בתוצאות, אבל אתה כבר פעיל בלעדיו.
+          </p>
+        </div>
+
+        <div className="flex w-full items-start gap-3 rounded-xl border border-line bg-surface2 p-4 text-right">
+          <Lock className="mt-0.5 h-5 w-5 shrink-0 text-accent-bright" />
+          <p className="text-sm text-muted">
+            שמרנו במכשיר זה <span className="font-medium text-ink">קוד עריכה מאובטח</span> — כך
+            רק אתה תוכל לעדכן את הפרופיל בהמשך.
           </p>
         </div>
 

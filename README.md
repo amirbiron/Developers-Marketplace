@@ -83,9 +83,9 @@ uvicorn app.main:app --reload
 
 | Method | Path | תיאור |
 |---|---|---|
-| `POST` | `/developers` | הרשמת מפתח (auto-publish, `is_verified=false`) |
+| `POST` | `/developers` | הרשמת מפתח (auto-publish). מחזיר `edit_token` חד-פעמי |
 | `GET` | `/developers/{id}` | פרופיל ציבורי — **בלי** `whatsapp_e164` |
-| `PATCH` | `/developers/{id}` | עדכון + השהיה עצמית דרך `is_active` |
+| `PATCH` | `/developers/{id}` | עדכון + השהיה עצמית. דורש `X-Edit-Token` (בעלוּת) |
 | `POST` | `/avatars` | העלאת תמונת פרופיל → מחזיר URL |
 | `GET` | `/meta/project-types` | 10 סוגי הפרויקט + תיאורים |
 | `POST` | `/match` | **הלב** — שומר פנייה, מריץ מנוע, מחזיר top-N (בלי מספרים) |
@@ -128,12 +128,15 @@ uvicorn app.main:app --reload
 - **ולידציה** — E.164, טווחי מספרים כולל NaN/Inf, escaping מלא של נתוני משתמש בקישור wa.me.
 - **שגיאות** — תשובות שגיאה גנריות בעברית, בלי stack traces / מזהים פנימיים.
 
-### ⚠️ פער ידוע — אימות בעלוּת
+### אימות בעלוּת (edit-token)
 
-ה-Spec אינו מגדיר שכבת auth, ולכן **בשלב הזה `POST /developers` ו-`PATCH /developers/{id}`
-פתוחים** — כל אחד יכול ליצור או לערוך כל פרופיל (כולל שינוי מספר הוואטסאפ). זו החלטת
-מוצר שנשארה פתוחה במכוון. **לפני פרודקשן חובה** להוסיף אימות בעלוּת (למשל אסימון בעת
-הרשמה, או Supabase Auth) שיגביל עריכה לבעל הפרופיל בלבד.
+`POST /developers` מחזיר **`edit_token` חד-פעמי**; ב-DB נשמר רק ה-hash שלו
+(`edit_token_hash`, לעולם לא נחשף). `PATCH /developers/{id}` דורש את האסימון ב-header
+`X-Edit-Token` ומאמת אותו בזמן קבוע — כך רק מי שיצר את הפרופיל יכול לערוך אותו
+(כולל שינוי מספר הוואטסאפ). `is_verified` נשאר admin-only (לא נכלל בסכמות הקלט).
+
+> הרחבה עתידית: מעבר ל-Supabase Auth (חשבונות אמיתיים + `owner_id`) כשיהיה פרויקט
+> Supabase חי — הסכמה תומכת בכך בלי migration כואב.
 
 ---
 

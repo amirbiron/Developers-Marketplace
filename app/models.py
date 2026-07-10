@@ -50,6 +50,8 @@ class Developer(Base):
     availability: Mapped[str] = mapped_column(Text, nullable=False)  # enum, ראה CheckConstraint
     portfolio_url: Mapped[str | None] = mapped_column(Text)  # בסיס לפילטר "רק עם תיק עבודות"
     links: Mapped[dict | None] = mapped_column(JSONB)  # {"linkedin": "...", "github": "..."}
+    # hash של אסימון עריכה — בעלוּת על הפרופיל. עריכה דורשת את האסימון. לא נחשף לעולם.
+    edit_token_hash: Mapped[str | None] = mapped_column(Text)
     is_verified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )

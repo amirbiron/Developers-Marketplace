@@ -3,6 +3,7 @@
 import * as mock from "./mock";
 import type {
   DeveloperCreateBody,
+  DeveloperCreateResponse,
   DeveloperPublic,
   MatchRequestBody,
   MatchResponse,
@@ -77,9 +78,11 @@ export async function postReferral(
   });
 }
 
-export async function postDeveloper(body: DeveloperCreateBody): Promise<DeveloperPublic> {
+export async function postDeveloper(
+  body: DeveloperCreateBody,
+): Promise<DeveloperCreateResponse> {
   if (USE_MOCK) return mock.postDeveloper(body);
-  return request<DeveloperPublic>("/developers", {
+  return request<DeveloperCreateResponse>("/developers", {
     method: "POST",
     body: JSON.stringify(body),
   });
