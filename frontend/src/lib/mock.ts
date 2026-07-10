@@ -285,6 +285,32 @@ export async function postDeveloper(body: DeveloperCreateBody): Promise<Develope
   return { id: fakeUuid(), is_verified: false, is_active: true, ...rest };
 }
 
+export async function getDeveloper(id: string): Promise<DeveloperPublic> {
+  await delay(250);
+  const dev = DEVELOPERS.find((d) => d.developer_id === id);
+  if (!dev) {
+    throw new Error("המפתח לא נמצא");
+  }
+  return {
+    id: dev.developer_id,
+    full_name: dev.full_name,
+    title: dev.title,
+    bio: dev.bio,
+    highlight: dev.highlight,
+    avatar_url: dev.avatar_url,
+    project_types: dev.project_types,
+    stack: dev.stack ?? undefined,
+    ai_tools: dev.ai_tools ?? undefined,
+    pricing_models: dev.pricing_models,
+    hourly_rate: dev.hourly_rate,
+    availability: dev.availability,
+    portfolio_url: dev.portfolio_url,
+    links: dev.links,
+    is_verified: dev.is_verified,
+    is_active: true,
+  };
+}
+
 export async function postAvatar(file: File): Promise<{ avatar_url: string }> {
   await delay(400);
   // בדמו — מחזירים data-URL מקומי כדי שהתצוגה המקדימה תעבוד בלי בקאנד

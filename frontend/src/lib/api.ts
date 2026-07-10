@@ -74,6 +74,11 @@ export async function postDeveloper(body: DeveloperCreateBody): Promise<Develope
   });
 }
 
+export async function getDeveloper(id: string): Promise<DeveloperPublic> {
+  if (USE_MOCK) return mock.getDeveloper(id);
+  return request<DeveloperPublic>(`/developers/${id}`, { method: "GET" });
+}
+
 export async function postAvatar(file: File): Promise<{ avatar_url: string }> {
   if (USE_MOCK) return mock.postAvatar(file);
   const form = new FormData();

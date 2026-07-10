@@ -59,14 +59,23 @@ cp .env.example .env
 # 3. הרצת מיגרציות (יוצר טבלאות + אינדקסים + trigger + זריעת קטגוריות)
 alembic upgrade head
 
-# 4. החלת RLS ומדיניות פרטיות (חד-פעמי, ב-Supabase SQL Editor או psql)
+# 4. (אופציונלי) זריעת מפתחי דמו — כדי ש-/match יחזיר תוצאות
+python scripts/seed_developers.py            # --force לזריעה מחדש
+
+# 5. החלת RLS ומדיניות פרטיות (חד-פעמי, ב-Supabase SQL Editor או psql)
 #    מריצים את התוכן של supabase/policies.sql
 
-# 5. הרצת השרת
+# 6. הרצת השרת
 uvicorn app.main:app --reload
 ```
 
 השרת יעלה על `http://localhost:8000`. תיעוד אינטראקטיבי: `http://localhost:8000/docs`.
+
+### חיבור הפרונט לבקאנד
+
+הפרונט (`frontend/`) רץ כברירת מחדל ב-mock mode. לחיבור לבקאנד האמיתי, צור
+`frontend/.env` עם `VITE_USE_MOCK=false` ו-`VITE_API_BASE_URL=http://localhost:8000`,
+ואז `npm run dev`. ה-CORS נשלט דרך `ALLOWED_ORIGINS`. פרטים ב-`frontend/README.md`.
 
 ---
 
