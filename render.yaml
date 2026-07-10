@@ -1,5 +1,5 @@
-# הגדרת פריסה ל-Render (Spec §0: FastAPI על Render).
-# preDeployCommand מריץ את המיגרציות אוטומטית לפני כל deploy.
+# הגדרת פריסה ל-Render — שני שירותים: backend (FastAPI) + frontend (Vite כאתר סטטי).
+# preDeployCommand מריץ את המיגרציות אוטומטית לפני כל deploy של ה-backend.
 services:
   - type: web
     name: developers-marketplace-api
@@ -26,3 +26,21 @@ services:
         sync: false
       - key: WA_GREETING
         sync: false
+
+  # --- פרונט: Vite SPA כאתר סטטי ---
+  - type: web
+    name: developers-marketplace-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # כתובת ה-backend (build-time). VITE_USE_MOCK לא מוגדר → ברירת מחדל false → API אמיתי.
+      # הגדר לכתובת שירות ה-API, למשל: https://developers-marketplace-api.onrender.com
+      - key: VITE_API_BASE_URL
+        sync: false
+    routes:
+      # SPA rewrite — כל נתיב מוגש דרך index.html, כדי ש-/dev/:id, /match, /join יעבדו ב-refresh/deep-link
+      - type: rewrite
+        source: /*
+        destination: /index.html

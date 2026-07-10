@@ -1,0 +1,11 @@
+# קונפיג פריסה ל-Netlify. ב-UI יש להגדיר Base directory = frontend
+# (אז הנתיבים כאן יחסיים ל-frontend/).
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA — כל נתיב מוגש דרך index.html (client-side routing: /dev/:id, /match, /join)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
