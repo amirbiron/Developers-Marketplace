@@ -8,9 +8,10 @@ interface ScoreRingProps {
 
 /** טבעת ציון התאמה — SVG עם גרדיאנט ירוק ואנימציית מילוי בכניסה. */
 export function ScoreRing({ value, size = 78, stroke = 6 }: ScoreRingProps) {
+  const clamped = Math.max(0, Math.min(100, value));
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - Math.max(0, Math.min(100, value)) / 100);
+  const offset = circumference * (1 - clamped / 100);
 
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
@@ -45,7 +46,7 @@ export function ScoreRing({ value, size = 78, stroke = 6 }: ScoreRingProps) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span dir="ltr" className="font-mono text-lg font-bold leading-none text-ink">
-          {value}
+          {clamped}
           <span className="text-xs text-muted">%</span>
         </span>
         <span className="mt-0.5 text-[10px] text-faint">התאמה</span>

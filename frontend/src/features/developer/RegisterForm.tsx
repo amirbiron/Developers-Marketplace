@@ -95,9 +95,16 @@ export function RegisterForm() {
       return { ...f, [key]: has ? f[key].filter((v) => v !== value) : [...f[key], value] };
     });
 
+  const normalizeWhatsapp = (raw: string) => raw.replace(/[\s\-()]/g, "").replace(/^\+/, "");
+
   const onAvatarPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors(["התמונה גדולה מדי — מקסימום 5MB"]);
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
     setAvatarLoading(true);
     setErrors([]);
     try {
@@ -116,7 +123,7 @@ export function RegisterForm() {
     if (form.project_types.length === 0) e.push("בחר לפחות סוג פרויקט אחד");
     if (form.pricing_models.length === 0) e.push("בחר לפחות מודל תמחור אחד");
     if (!form.availability) e.push("בחר זמינות");
-    const phone = form.whatsapp.replace(/[\s\-()]/g, "").replace(/^\+/, "");
+    const phone = normalizeWhatsapp(form.whatsapp);
     if (!/^[1-9]\d{7,14}$/.test(phone)) e.push("מספר וואטסאפ לא תקין (E.164, למשל 972501234567)");
     if (
       form.pricing_models.includes("hourly") &&
@@ -139,7 +146,7 @@ export function RegisterForm() {
     const links: Record<string, string> = {};
     if (form.linkedin.trim()) links.linkedin = form.linkedin.trim();
     if (form.github.trim()) links.github = form.github.trim();
-    const phone = form.whatsapp.replace(/[\s\-()]/g, "").replace(/^\+/, "");
+    const phone = normalizeWhatsapp(form.whatsapp);
 
     const body: DeveloperCreateBody = {
       full_name: form.full_name.trim(),

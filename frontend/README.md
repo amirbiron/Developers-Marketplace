@@ -7,19 +7,22 @@
 
 ```bash
 npm install
-npm run dev        # פיתוח — ברירת מחדל: mock mode (עובד בלי בקאנד)
+npm run dev        # פיתוח (ראה "חיבור לבקאנד" — בקאנד אמיתי או mock)
 npm run build      # בנייה לפרודקשן (typecheck + bundle)
 npm run preview    # תצוגה מקדימה של ה-build
 ```
 
 ## חיבור לבקאנד
 
-כברירת מחדל האפליקציה רצה ב-**mock mode** עם נתוני דמו — כדי לראות הכול בלי בקאנד חי.
-לחיבור ל-FastAPI האמיתי, צור `.env` מתוך `.env.example`:
+כברירת מחדל האפליקציה פונה ל-**בקאנד אמיתי** (`VITE_API_BASE_URL`, ברירת מחדל
+`http://localhost:8000`). כך פריסה לפרודקשן לא משרתת בטעות נתוני דמו.
+
+להרצה עצמאית בלי בקאנד (נתוני דמו) — העתק `.env.example` ל-`.env`; הוא כבר מגדיר
+`VITE_USE_MOCK=true`:
 
 ```
-VITE_USE_MOCK=false
-VITE_API_BASE_URL=http://localhost:8000
+VITE_USE_MOCK=true                       # מצב דמו — בלי בקאנד חי
+VITE_API_BASE_URL=http://localhost:8000  # כתובת ה-FastAPI (כשלא במצב דמו)
 ```
 
 (ה-CORS בבקאנד נשלט דרך `ALLOWED_ORIGINS`.)

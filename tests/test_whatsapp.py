@@ -65,4 +65,5 @@ class TestLink:
         text_part = link.split("?text=", 1)[1]
         # אמוji מקודד ל-%XX ולא נשאר גולמי
         assert "🚀" not in text_part
-        assert unquote(text_part).endswith("🚀.") or "🚀" in unquote(text_part)
+        # ההודעה מסתיימת ב-"אפליקציה 🚀." — בדיקה מדויקת
+        assert unquote(text_part).endswith("🚀.")

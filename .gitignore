@@ -16,7 +16,9 @@ htmlcov/
 
 # סביבה מקומית — לעולם לא ל-git (מכיל מפתחות)
 .env
-.env.local
+.env.*
+!.env.example
+!.env.template
 *.local
 
 # IDE / מערכת הפעלה

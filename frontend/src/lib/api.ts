@@ -11,7 +11,10 @@ import type {
 } from "./types";
 
 const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
-export const USE_MOCK = (import.meta.env.VITE_USE_MOCK ?? "true") !== "false";
+// ברירת מחדל: בקאנד אמיתי. mock מופעל רק כש-VITE_USE_MOCK="true" (ראה .env.example).
+export const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
+
+const REQUEST_TIMEOUT_MS = 15000;
 
 export class ApiError extends Error {
   status: number;
@@ -23,14 +26,22 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit): Promise<T> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   let res: Response;
   try {
     res = await fetch(`${BASE}${path}`, {
       headers: { "Content-Type": "application/json" },
       ...init,
+      signal: controller.signal,
     });
-  } catch {
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new ApiError("הבקשה ארכה יותר מדי. נסו שוב מאוחר יותר.", 0);
+    }
     throw new ApiError("לא הצלחנו להתחבר לשרת. בדוק את החיבור ונסה שוב.", 0);
+  } finally {
+    clearTimeout(timer);
   }
   if (!res.ok) {
     let detail = "אירעה שגיאה. נסו שוב.";

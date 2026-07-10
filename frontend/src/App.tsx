@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { DeveloperPage } from "@/pages/DeveloperPage";
 import { HomePage } from "@/pages/HomePage";
@@ -13,6 +13,8 @@ export default function App() {
         <Route path="/match" element={<MatchPage />} />
         <Route path="/join" element={<JoinPage />} />
         <Route path="/dev/:id" element={<DeveloperPage />} />
+        {/* נתיב לא מוכר → הפניה לדף הבית במקום מסך ריק */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
   );

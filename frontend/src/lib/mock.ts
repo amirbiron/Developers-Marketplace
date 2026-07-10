@@ -314,9 +314,10 @@ export async function getDeveloper(id: string): Promise<DeveloperPublic> {
 export async function postAvatar(file: File): Promise<{ avatar_url: string }> {
   await delay(400);
   // בדמו — מחזירים data-URL מקומי כדי שהתצוגה המקדימה תעבוד בלי בקאנד
-  const dataUrl = await new Promise<string>((resolve) => {
+  const dataUrl = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error ?? new Error("קריאת הקובץ נכשלה"));
     reader.readAsDataURL(file);
   });
   return { avatar_url: dataUrl };

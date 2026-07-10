@@ -14,12 +14,9 @@ export function EmptyState({ onReset }: { onReset: () => void }) {
           ונעדכן אותך כשיצטרף מי שמתאים.
         </p>
       </div>
-      <div className="flex flex-wrap justify-center gap-2">
-        <Button variant="secondary" onClick={onReset}>
-          חיפוש חדש
-        </Button>
-        <Button variant="primary">פרסם בקשה פתוחה</Button>
-      </div>
+      <Button variant="primary" onClick={onReset}>
+        חיפוש חדש
+      </Button>
     </div>
   );
 }

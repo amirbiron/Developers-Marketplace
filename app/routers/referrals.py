@@ -31,6 +31,11 @@ async def create_referral(
     if developer is None or not developer.is_active:
         raise HTTPException(status_code=404, detail="המפתח לא נמצא")
 
+    # אימות שהמפתח אכן הוחזר בתוצאות של אותה בקשה — מונע קצירת מספרי וואטסאפ
+    # ע"י פנייה למפתחים אקראיים שלא הותאמו. הודעה גנרית כדי לא לחשוף קיום מפתח.
+    if developer.id not in (request_row.matched_dev_ids or []):
+        raise HTTPException(status_code=404, detail="המפתח לא נמצא")
+
     # שחזור דטרמיניסטי של הציון שהוצג — אותה נוסחה בדיוק כמו ב-/match
     match_score = score_developer(
         developer_to_candidate(developer), request_to_query(request_row)

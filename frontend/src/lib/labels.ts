@@ -120,7 +120,7 @@ export const TIMELINE_LABELS: Record<Timeline, { label: string; hint: string }> 
 };
 
 export const INVOLVEMENT_LABELS: Record<Involvement, { label: string; hint: string }> = {
-  full_handoff: { label: "מסירה מלאה", hint: "שיבנו לי מקצה לקצה" },
+  full_handoff: { label: "מסירה מלאה", hint: "יבנו לי מקצה לקצה" },
   collaborative: { label: "עבודה משותפת", hint: "רוצה להיות מעורב בתהליך" },
 };
 
