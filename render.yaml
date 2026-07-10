@@ -1,0 +1,28 @@
+# הגדרת פריסה ל-Render (Spec §0: FastAPI על Render).
+# preDeployCommand מריץ את המיגרציות אוטומטית לפני כל deploy.
+services:
+  - type: web
+    name: developers-marketplace-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      # DATABASE_URL — connection string של Postgres מ-Supabase (פורמט asyncpg)
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: AVATAR_BUCKET
+        value: avatars
+      - key: MAX_AVATAR_BYTES
+        value: "5242880"
+      # ALLOWED_ORIGINS — דומייני הפרונט (פסיק מפריד), למשל https://app.example.com
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: WA_GREETING
+        sync: false
